@@ -1,0 +1,6 @@
+(v1 / want-01
+      :ARG0 (v2 / person
+            :ARG0-of (v4 / develop-02))
+      :ARG1 (v3 / sleep-01
+            :ARG0 v2))
+
