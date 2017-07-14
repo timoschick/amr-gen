@@ -2,9 +2,25 @@
 
 This is a Java-based implementation of the AMR-to-text generator introduced in "Transition-based Generation from Abstract Meaning Representations". For a detailed description of all relevant classes, please refer to the Javadoc documentation found in the `javadoc` subdirectory. Running the generator requires Java Version 8 or newer. 
 
+# Setup
+
+Before using the AMR generator, you must do the following:
+
+1) Extract the model files `models/models.tar.gz` into the `models` directory.
+2) Extract the language model file `res/lm.binary.gz` into the `res` directory.
+3) Build the Maven project using `pom.xml`, which automatically loads all dependencies. Alternatively, you may set up the generator using IntelliJ IDEA as described below.
+
+### Setup using IntelliJ IDEA
+
+Using [IntelliJ IDEA](https://www.jetbrains.com/idea/) (tested with IntelliJ IDEA Ultimate 2016.3 under Ubuntu 16.10, Windows 10 and OS X 10.10.5), the project can be set up as follows:
+
+- Select **File | New | Project from Existing Sources...**
+- In the "Select File or Directory to Import" dialogue, select the root folder of the implementation and click **Ok**.
+- In the "Import Project" dialogue, click **Next** several times and then **Finish**.
+
 # Generation
 
-There are two ways of generating sentences from AMR graphs using this generator: You may either use the precompiled and pretrained (using the [LDC2014T12](https://catalog.ldc.upenn.edu/ldc2014t12) corpus) generator's command line interface, which requires almost no time to set up but is not very flexible, or you may set up the generator as described in section [Setup](#setup) and then use the methods `loadAmrGraphs(String directory, boolean forTesting)` and `generate(List<Amr> amrs)` of class `main.AmrMain`.
+There are two ways of generating sentences from AMR graphs using this generator: You may either use the pretrained (using the [LDC2014T12](https://catalog.ldc.upenn.edu/ldc2014t12) corpus) generator's command line interface or you may use the methods `loadAmrGraphs(String directory, boolean forTesting)` and `generate(List<Amr> amrs)` of class `main.AmrMain`.
 
 For using the command line interface, the following parameters may be specified:
 - `--input` (`-i`): The file in which the AMR graphs are stored in official [AMR format](https://github.com/amrisi/amr-guidelines/blob/master/amr.md). The AMR graphs must be separated by empty lines and there must be *two* line breaks after the last graph. If this parameter is not specified, it is assumed that the required AMR graphs can be found in the subdirectories `bolt`, `consensus`, `dfa`, `proxy` and `xinhua` of `corpus/test` (as is the case for LDC2014T12).
@@ -41,21 +57,9 @@ The following command generates sentences from all AMR graphs found in the subdi
 java -jar -Xmx8g AmrGen.jar -o some/directory/output.txt -b -s
 ```
 
-# Setup
-
-To set up the AMR generator, simply build the Maven project using `pom.xml`, which automatically loads all dependencies.
-
-### Setup using IntelliJ IDEA
-
-Using [IntelliJ IDEA](https://www.jetbrains.com/idea/) (tested with IntelliJ IDEA Ultimate 2016.3 under Ubuntu 16.10, Windows 10 and OS X 10.10.5), the project can be set up as follows:
-
-- Select **File | New | Project from Existing Sources...**
-- In the "Select File or Directory to Import" dialogue, select the root folder of the implementation and click **Ok**.
-- In the "Import Project" dialogue, click **Next** several times and then **Finish**.
-
 # Training
 
-After performing the steps described above, the maximum entropy models required by the generator can be retrained using the `train()` method provided by `main.AmrMain`. This assumes that the development and training AMR graphs can be found in the subdirectories `bolt`, `consensus`, `dfa`, `proxy` and `xinhua` of `corpus/dev` and `corpus/training`, respectively. Each of these subfolders should contain the following four files: 
+The maximum entropy models required by the generator can be retrained using the `train()` method provided by `main.AmrMain`. This assumes that the development and training AMR graphs can be found in the subdirectories `bolt`, `consensus`, `dfa`, `proxy` and `xinhua` of `corpus/dev` and `corpus/training`, respectively. Each of these subfolders should contain the following four files: 
 - **data.amr.tok.aligned**: A list of aligned and tokenized AMR graphs, separated by newlines. The file must end with two line breaks. To obtain the reported results, the alignments should be created using [JAMR](https://github.com/jflanigan/jamr).
 Above each AMR graph, there should be a line starting with `# ::tok` containing a tokenized reference realization and a line starting with `# ::alignments` containing the alignments. For example, an AMR graph may be represented like this:
 
@@ -79,7 +83,7 @@ Above each AMR graph, there should be a line starting with `# ::tok` containing 
     mark(sleep-5, to-4)
     ```
 
-- **pos.txt**: A newline-separated list of POS sequences, where POS tags are separated by spaces and each sequence corresponds in a one-to-one manner to the reference realizations of the AMR graphs in the above file. The following entry corresponds to the sentence represented by the above AMR graph:
+- **pos.txt**: A newline-separated list of POS sequences, where POS tags are separated by tabs and each sequence corresponds in a one-to-one manner to the reference realizations of the AMR graphs in the above file. The following entry corresponds to the sentence represented by the above AMR graph:
 
     ```
     DT NN VBZ PRT VB
