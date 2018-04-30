@@ -2,6 +2,8 @@
 
 This is a Java-based implementation of the AMR-to-text generator introduced in "Transition-based Generation from Abstract Meaning Representations". For a detailed description of all relevant classes, please refer to the Javadoc documentation found in the `javadoc` subdirectory. Running the generator requires Java Version 8 or newer. 
 
+This project is licensed unter the terms of the GNU LESSER GENERAL PUBLIC LICENSE Version 3.
+
 # Setup
 
 Before using the AMR generator, you must do the following:
